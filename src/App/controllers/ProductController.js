@@ -104,13 +104,30 @@ class ProductController {
             },
         ],
     });
-
-
-   
-
     return response.json(products);
  }
+ async delete(req, res) {
+    try {
+      const { id } = req.params;
 
+      
+      const product = await Product.findByPk(id);
+
+     
+      if (!product) {
+        return res.status(404).json({ error: 'Produto não encontrado' });
+      }
+
+      
+      await product.destroy();
+
+      return res.status(200).json({ message: 'Produto excluído com sucesso' });
+    } catch (error) {
+      console.error('Erro ao excluir o produto:', error);
+      return res.status(500).json({ error: 'Erro ao excluir o produto' });
+    }
+  }
 }
+
 
 export default new ProductController();
